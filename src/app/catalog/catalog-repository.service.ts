@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject, EMPTY, throwError } from "rxjs";
 import {  delay } from "rxjs/operators";
-import { UserRepositoryService } from "../services/user-repository.service";
+import { UserRepositoryService } from "../core/user-repository.service";
 
 @Injectable()
 export class CatalogRepositoryService {
