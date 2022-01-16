@@ -1,53 +1,72 @@
-import { Component } from '@angular/core';
-
-import { DataRepositoryService } from "../services/data-repository.service"
+import { Component } from "@angular/core";
+import { UserRepositoryService } from "../services/user-repository.service";
+import { CatalogRepositoryService } from "./catalog-repository.service";
+import { IClass } from "./class.model";
 
 @Component({
-  styleUrls: ['./catalog.component.css'],
-  templateUrl: './catalog.component.html'
+  styleUrls: ["./catalog.component.css"],
+  templateUrl: "./catalog.component.html",
 })
 export class CatalogComponent {
-  classes:any[];
-  visibleClasses:any[];
+  classes: IClass[] = [];
+  visibleClasses: IClass[] = [];
 
-  constructor(public dataRepository:DataRepositoryService) {}
+  constructor(
+    public catalogRepository: CatalogRepositoryService,
+    public userRepository: UserRepositoryService
+  ) {}
 
   ngOnInit() {
-    this.dataRepository.getCatalog()
-      .subscribe(classes => { this.classes = classes; this.applyFilter('')});
+    this.catalogRepository.getCatalog().subscribe((classes) => {
+      this.classes = classes;
+      this.applyFilter("");
+    });
   }
 
-  enroll(classToEnroll) {
+  enroll(classToEnroll: IClass) {
     classToEnroll.processing = true;
-    this.dataRepository.enroll(classToEnroll.classId)
-      .subscribe(
-        null,
-        (err) => {console.error(err); classToEnroll.processing = false}, //add a toast message or something
-        () => {classToEnroll.processing = false; classToEnroll.enrolled=true;},
-      );
+    this.catalogRepository.enroll(classToEnroll.classId).subscribe(
+      null,
+      (err) => {
+        console.error(err);
+        classToEnroll.processing = false;
+      }, //add a toast message or something
+      () => {
+        classToEnroll.processing = false;
+        classToEnroll.enrolled = true;
+      }
+    );
   }
 
-  drop(classToDrop) {
+  drop(classToDrop: IClass) {
     classToDrop.processing = true;
-    this.dataRepository.drop(classToDrop.classId)
-      .subscribe(
-        null,
-        (err) => { console.error(err); classToDrop.processing = false}, //add a toast message or something
-        () => {classToDrop.processing = false; classToDrop.enrolled=false;}
-      );
+    this.catalogRepository.drop(classToDrop.classId).subscribe(
+      null,
+      (err) => {
+        console.error(err);
+        classToDrop.processing = false;
+      }, //add a toast message or something
+      () => {
+        classToDrop.processing = false;
+        classToDrop.enrolled = false;
+      }
+    );
   }
 
-  applyFilter(filter) {
-    if (!filter)
-      return this.visibleClasses = this.classes;
+  applyFilter(filter:string) {
+    if (!filter) return (this.visibleClasses = this.classes);
 
-    if (filter === 'GEN') {
-      return this.visibleClasses = this.classes.filter(c =>
-        !c.course.courseNumber.startsWith('CH') &&
-        !c.course.courseNumber.startsWith('PO') &&
-        !c.course.courseNumber.startsWith('SP'));
+    if (filter === "GEN") {
+      return (this.visibleClasses = this.classes.filter(
+        (c) =>
+          !c.course.courseNumber.startsWith("CH") &&
+          !c.course.courseNumber.startsWith("PO") &&
+          !c.course.courseNumber.startsWith("SP")
+      ));
     }
 
-    return this.visibleClasses = this.classes.filter(c => c.course.courseNumber.startsWith(filter));
+    return (this.visibleClasses = this.classes.filter((c) =>
+      c.course.courseNumber.startsWith(filter)
+    ));
   }
 }

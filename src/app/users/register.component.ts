@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { DataRepositoryService } from "../services/data-repository.service";
+import { UserRepositoryService } from "../services/user-repository.service";
+import { IUser } from "./user.model";
 
 @Component({
   styleUrls: ["./register.component.css"],
@@ -17,10 +18,8 @@ export class RegisterComponent {
 
   constructor(
     private router: Router,
-    private dataRepository: DataRepositoryService
-  ) {}
-
-  ngOnInit() {
+    private userRepository: UserRepositoryService
+  ) {
     this.firstName = new FormControl("", Validators.required);
     this.lastName = new FormControl("", Validators.required);
     this.email = new FormControl("", Validators.required);
@@ -34,9 +33,9 @@ export class RegisterComponent {
     });
   }
 
-  registerUser(user) {
+  registerUser(user:IUser) {
     this.saving = true;
-    this.dataRepository.saveUser(user).subscribe(
+    this.userRepository.saveUser(user).subscribe(
       null,
       () => (this.saving = false),
       () => this.router.navigate(["/catalog"])
