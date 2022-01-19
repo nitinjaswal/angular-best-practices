@@ -5,6 +5,11 @@ import { SignInComponent } from './users/sign-in.component';
 
 export const appRoutes : Routes = [
   { path: 'catalog', component: CatalogComponent },
-  { path: 'users/register', component: RegisterComponent, },
-  { path: 'users/sign-in', component: SignInComponent, },
+  {
+    //for any url with 'users' load 'UsersModule' from path './users/user.module'
+    path:'users',
+    loadChildren:()=>import('./users/user.module').then(m=>m.UsersModule)
+    //it is a async operation and returns a promise
+  },
+
 ];
