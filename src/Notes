@@ -1,0 +1,16 @@
+Angular performance
+1)AOT compilation and compilation
+-Use the angular CLI
+-Compile before deploying
+AOT:An Angular application consists mainly of components and their HTML templates. Because the components and templates provided by Angular cannot be understood by the browser directly, Angular applications require a compilation process before they can run in a browser.
+
+The Angular ahead-of-time (AOT) compiler converts your Angular HTML and TypeScript code into efficient JavaScript code during the build phase before the browser downloads and runs that code. Compiling your application during the build process provides a faster rendering in the browser.
+-Faster rendering With AOT, the browser downloads a pre-compiled version of the application. The browser loads executable code so it can render the application immediately, without waiting to compile the application first.
+
+
+-The ng build command writes generated build artifacts to the output folder (by default is -dist/). The ng serve command does not write build and it builds artifacts from memory instead for a faster development experience.
+
+-Lazy loading feature modules
+-Paying attention to bundle sizes
+-Immutability and OnPush change detection
+-Pure and impure pipes
